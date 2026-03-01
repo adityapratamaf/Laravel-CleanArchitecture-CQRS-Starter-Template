@@ -31,6 +31,27 @@
             value="{{ $filters['search'] }}"
         />
 
+        @php
+            $filters['sort_by']  = $filters['sort_by']  ?? request('sort_by', 'id');
+            $filters['sort_dir'] = $filters['sort_dir'] ?? request('sort_dir', 'desc');
+        @endphp
+
+        <select name="sort_by">
+            @foreach([
+                'id' => 'ID',
+                'name' => 'Name',
+                'email' => 'Email',
+                'created_at' => 'Created At',
+            ] as $key => $label)
+                <option value="{{ $key }}" @selected($filters['sort_by'] === $key)>{{ $label }}</option>
+            @endforeach
+        </select>
+
+        <select name="sort_dir">
+            <option value="asc"  @selected($filters['sort_dir'] === 'asc')>ASC</option>
+            <option value="desc" @selected($filters['sort_dir'] === 'desc')>DESC</option>
+        </select>
+
         <select name="per_page">
             @foreach([10, 15, 25, 50, 100] as $pp)
                 <option value="{{ $pp }}" @selected((int)$filters['per_page'] === $pp)>{{ $pp }}</option>
@@ -46,11 +67,40 @@
 
     <a href="{{ url('/users/create') }}">+ Create User</a>
 
+    <!-- Helper sort_by * sort_dir -->
+    @php
+    $qs = request()->query();
+
+    $sortLink = function(string $col) use ($qs) {
+        $currentBy = $qs['sort_by'] ?? 'id';
+        $currentDir = $qs['sort_dir'] ?? 'desc';
+
+        $nextDir = ($currentBy === $col && $currentDir === 'asc') ? 'desc' : 'asc';
+
+        return url('/users') . '?' . http_build_query(array_merge($qs, [
+        'sort_by' => $col,
+        'sort_dir' => $nextDir,
+        'page' => 1, // reset page biar nggak nyasar
+        ]));
+    };
+
+    $arrow = function(string $col) use ($qs) {
+        $currentBy = $qs['sort_by'] ?? 'id';
+        $currentDir = $qs['sort_dir'] ?? 'desc';
+
+        if ($currentBy !== $col) return '';
+        return $currentDir === 'asc' ? ' ↑' : ' ↓';
+    };
+    @endphp
+
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
-        <tr>
-            <th>ID</th><th>Name</th><th>Email</th><th>Action</th>
-        </tr>
+            <tr>
+                <th><a href="{{ $sortLink('id') }}">ID{{ $arrow('id') }}</a></th>
+                <th><a href="{{ $sortLink('name') }}">Name{{ $arrow('name') }}</a></th>
+                <th><a href="{{ $sortLink('email') }}">Email{{ $arrow('email') }}</a></th>
+                <th>Action</th>
+            </tr>
         </thead>
         <tbody>
         @forelse($users as $u)

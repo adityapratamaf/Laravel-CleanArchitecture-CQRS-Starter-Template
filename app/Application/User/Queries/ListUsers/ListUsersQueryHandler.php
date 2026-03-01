@@ -11,7 +11,7 @@ class ListUsersQueryHandler
     {
         $qb = DB::table('users')
             ->select('id', 'name', 'email', 'created_at')
-            ->orderByDesc('id');
+            ->orderBy($query->sortBy, $query->sortDir);
 
         if ($query->search) {
             $s = mb_strtolower(trim($query->search));

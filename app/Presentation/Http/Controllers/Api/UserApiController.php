@@ -20,12 +20,16 @@ class UserApiController
         $page = max(1, (int) $request->query('page', 1));
         $perPage = min(max((int) $request->query('per_page', 15), 1), 100);
         $search = $request->query('search');
+        $sortBy = $request->query('sort_by', 'id');
+        $sortDir = $request->query('sort_dir', 'desc');
 
         return response()->json(
             $queryBus->ask(new ListUsersQuery(
                 page: $page,
                 perPage: $perPage,
-                search: is_string($search) ? $search : null
+                search: is_string($search) ? $search : null,
+                sortBy: is_string($sortBy) ? $sortBy : 'id',
+            sortDir: is_string($sortDir) ? $sortDir : 'desc'
             ))
         );
     }
