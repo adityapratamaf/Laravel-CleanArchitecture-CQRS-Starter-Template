@@ -18,4 +18,11 @@ class CQRSServiceProvider extends ServiceProvider
 
         $this->app->bind(UserRepository::class, EloquentUserRepository::class);
     }
+
+    public function boot(): void
+    {
+        $this->app['view']->getFinder()->addLocation(
+            app_path('Presentation/Http/Resources/views')
+        );
+    }
 }
