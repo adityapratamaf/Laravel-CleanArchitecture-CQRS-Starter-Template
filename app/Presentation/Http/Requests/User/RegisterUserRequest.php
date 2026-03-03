@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Presentation\Http\Requests;
+namespace App\Presentation\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreUserRequest extends FormRequest
+class RegisterUserRequest extends FormRequest
 {
     public function rules(): array
     {

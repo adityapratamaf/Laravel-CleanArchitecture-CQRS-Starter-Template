@@ -5,7 +5,7 @@ namespace App\Presentation\Http\Controllers\Web;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AuthController
+class AuthWebController
 {
     public function showLogin()
     {

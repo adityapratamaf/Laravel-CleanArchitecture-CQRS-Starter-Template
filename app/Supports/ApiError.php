@@ -9,13 +9,12 @@ class ApiError
         int $status,
         ?string $code = null,
         array $errors = [],
-        array $meta = []
     ): array {
         return [
             'message' => $message,
             'code' => $code ?? self::defaultCode($status),
-            'errors' => (object) $errors,
-            'meta' => (object) $meta,
+            'status' => $status,
+            'errors' => (object) $errors
         ];
     }
 

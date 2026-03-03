@@ -14,7 +14,7 @@ use App\Application\User\Commands\DeleteUser\DeleteUserCommand;
 use App\Presentation\Http\Requests\StoreUserRequest;
 use App\Presentation\Http\Requests\UpdateUserRequest;
 
-class UserPageController
+class UserWebController
 {
     public function index(Request $request, QueryBus $queryBus)
     {
